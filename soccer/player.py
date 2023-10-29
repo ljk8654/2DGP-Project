@@ -42,9 +42,9 @@ class Move:
     @staticmethod
     def enter(player, e):
         if right_down(e) or left_up(e):
-            player.x_dir, player.action, player.y_dir = 1, 1, 0
+            player.x_dir, player.action, player.y_dir = 1, 3, 0
         elif left_down(e) or right_up(e):
-            player.x_dir, player.action, player.y_dir = -1, 3, 0
+            player.x_dir, player.action, player.y_dir = -1, 1, 0
         elif up_down(e) or up_up(e):
             player.y_dir, player.action, player.x_dir = 1, 2, 0
         elif down_down(e) or down_up(e):
@@ -63,7 +63,6 @@ class Move:
 
     @staticmethod
     def draw(player):
-        if player.action == 3:
 
         player.image.clip_draw(player.frame * 40, player.action * 43, 40, 43, player.x, player.y)
         

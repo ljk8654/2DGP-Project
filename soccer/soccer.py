@@ -2,6 +2,7 @@ from pico2d import *
 
 from player import Player
 
+from soccer_ball import Ball
 
 # Game object class here
 
@@ -28,9 +29,10 @@ def reset_world():
 
     running = True
     world = []
-
+    ball = Ball()
     player = Player()
     world.append(player)
+    world.append(ball)
 
 
 
