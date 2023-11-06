@@ -20,7 +20,7 @@ def handle_events():
             player.handle_event(event)
 
 
-def reset_world():
+def init():
     global running
     global grass
     global team
@@ -34,28 +34,27 @@ def reset_world():
     world.append(player)
     world.append(ball)
 
+def finish():
+    pass
 
-
-def update_world():
+def update():
     for o in world:
         o.update()
     pass
 
 
-def render_world():
+def draw():
     clear_canvas()
     for o in world:
         o.draw()
     update_canvas()
 
+def collide(a,b):
+    left_a,bottom_a,right_a,top_a = a.get_bb()
+    left_b,bottom_b,right_b,top_b = b.get_bb()
+    if left_a > right_b: return False
+    if right_a < left_b: return False
+    if top_a < bottom_b: return False
+    if bottom_a > top_b: return False
 
-open_canvas()
-reset_world()
-# game loop
-while running:
-    handle_events()
-    update_world()
-    render_world()
-    delay(0.05)
-# finalization code
-close_canvas()
+    return True

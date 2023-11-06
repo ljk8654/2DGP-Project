@@ -63,8 +63,10 @@ class Move:
 
     @staticmethod
     def draw(player):
-
-        player.image.clip_draw(player.frame * 40, player.action * 43, 40, 43, player.x, player.y)
+        if player.action == 3:
+            player.image.clip_composite_draw(player.frame * 40, 43, 40, 43, 0,'h', player.x, player.y,40,43)
+        else:
+            player.image.clip_draw(player.frame * 40, player.action * 43, 40, 43, player.x, player.y)
         
 
 
@@ -87,8 +89,11 @@ class Idle:
 
     @staticmethod
     def draw(player):
-        player.image.clip_draw(player.frame * 40, player.action * 43, 40, 43,
-                            player.x, player.y)
+        if player.action == 3:
+            player.image.clip_composite_draw(player.frame * 40, 43, 40, 43, 0,'h', player.x, player.y,40,43)
+        else:
+            player.image.clip_draw(player.frame * 40, player.action * 43, 40, 43, player.x, player.y)
+
         pass
 
 
@@ -142,3 +147,7 @@ class Player:
 
     def draw(self):
         self.state_mashine.draw()
+        draw_rectangle(*self.get_bb())
+
+    def get_bb(self):
+        return self.x -20, self.y - 20, self.x+20,self.y+20
