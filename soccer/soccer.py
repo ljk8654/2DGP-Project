@@ -1,5 +1,5 @@
 from pico2d import *
-
+import world
 from player import Player
 
 from soccer_ball import Ball
@@ -24,37 +24,24 @@ def init():
     global running
     global grass
     global team
-    global world
     global player
 
     running = True
-    world = []
     ball = Ball()
     player = Player()
-    world.append(player)
-    world.append(ball)
-
+    world.add_object(player, 1)
+    world.add_object(ball, 0)
+    world.add_collision_pair('player:ball',player,ball)
 def finish():
     pass
 
 def update():
-    for o in world:
-        o.update()
-    pass
+        world.update()
+        world.handle_collisions()
 
 
 def draw():
     clear_canvas()
-    for o in world:
-        o.draw()
+    world.render()
     update_canvas()
 
-def collide(a,b):
-    left_a,bottom_a,right_a,top_a = a.get_bb()
-    left_b,bottom_b,right_b,top_b = b.get_bb()
-    if left_a > right_b: return False
-    if right_a < left_b: return False
-    if top_a < bottom_b: return False
-    if bottom_a > top_b: return False
-
-    return True

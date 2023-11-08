@@ -2,7 +2,6 @@ from pico2d import *
 
 
 
-
 class Ball:
     def __init__(self):
         self.x, self. y = 400, 300
@@ -18,3 +17,7 @@ class Ball:
         draw_rectangle(*self.get_bb())
     def get_bb(self):
         return self.x-10, self.y-10,self.x+10,self.y+10
+
+    def handle_collision(self, group, other):
+        if group == 'player:ball':
+            self.x +=1
