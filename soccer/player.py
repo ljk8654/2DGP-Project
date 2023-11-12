@@ -1,8 +1,4 @@
 from pico2d import *
-import math
-
-
-# define event check fuctions
 
 
 def right_down(e):
@@ -34,7 +30,6 @@ def down_down(e):
 
 def down_up(e):
     return e[0] == 'INPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_DOWN
-
 
 
 
@@ -148,6 +143,7 @@ class Player:
     def draw(self):
         self.state_mashine.draw()
         draw_rectangle(*self.get_bb())
+
 
     def get_bb(self):
         return self.x -20, self.y - 20, self.x+20,self.y+20

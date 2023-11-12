@@ -1,23 +1,190 @@
 from pico2d import *
 
+def space_down(e):
+    return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_SPACE
+
+def right_down(e):
+    return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_RIGHT
 
 
-class Ball:
-    def __init__(self):
-        self.x, self. y = 400, 300
-        Ball.image = load_image('ball21x21.png')
+def right_up(e):
+    return e[0] == 'INPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_RIGHT
+
+
+def left_down(e):
+    return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_LEFT
+
+
+def left_up(e):
+    return e[0] == 'INPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_LEFT
+
+
+def up_down(e):
+    return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_UP
+
+
+def up_up(e):
+    return e[0] == 'INPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_UP
+
+
+def down_down(e):
+    return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_DOWN
+
+
+def down_up(e):
+    return e[0] == 'INPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_DOWN
+
+
+class Move:
+    @staticmethod
+    def enter(ball, e):
+        if right_down(e) or left_up(e):
+            if ball.x_dir == -1:
+                ball.x+= 40
+            if ball.x_dir == 0:
+                ball.x += 20
+            if ball.y_dir == 1:
+                ball.y -= 20
+            if ball.y_dir == -1:
+                ball.y += 20
+            ball.x_dir, ball.y_dir = 1, 0
+        elif left_down(e) or right_up(e):
+            if ball.x_dir == 1:
+                ball.x-= 40
+            if ball.x_dir == 0:
+                ball.x -= 20
+            if ball.y_dir == 1:
+                ball.y -= 20
+            if ball.y_dir == -1:
+                ball.y += 20
+            ball.x_dir, ball.y_dir = -1, 0
+        elif up_down(e) or up_up(e):
+            if ball.x_dir == -1:
+                ball.x+= 20
+            if ball.x_dir == 1:
+                ball.x -= 20
+            if ball.y_dir == 0:
+                ball.y += 20
+            if ball.y_dir == -1:
+                ball.y += 40
+            ball.y_dir, ball.x_dir = 1, 0
+        elif down_down(e) or down_up(e):
+            if ball.x_dir == -1:
+                ball.x+= 20
+            if ball.x_dir == 1:
+                ball.x -= 20
+            if ball.y_dir == 0:
+                ball.y -= 20
+            if ball.y_dir == +1:
+                ball.y -= 40
+            ball.y_dir, ball.x_dir = -1, 0
+
+    @staticmethod
+    def exit(ball, e):
+        pass
+
+    @staticmethod
+    def do(ball):
+        ball.x += ball.x_dir * 5
+        ball.y += ball.y_dir * 5
+        print(1)
+        pass
+
+    @staticmethod
+    def draw(ball):
+        ball.image.draw(ball.x, ball.y)
+
+
+class Idle:
+    @staticmethod
+    def enter(ball, e):
+        pass
+    @staticmethod
+    def exit(ball, e):
+        pass
+
+    @staticmethod
+    def do(ball):
+
+        pass
+
+    @staticmethod
+    def draw(ball):
+        ball.image.draw(ball.x, ball.y)
+
+
+class StateMachine:
+    def __init__(self, ball):
+        self.cur_state = Move
+        self.ball = ball
+        self.transitions = {
+            Idle: {right_down: Move, right_up: Move, left_down: Move, left_up: Move, down_down: Move, down_up: Move,
+                   up_down: Move, up_up: Move},
+            Move: {right_down: Idle, left_down: Idle, right_up: Idle, left_up: Idle, down_down: Idle, up_down: Idle,
+                   up_up: Idle, down_up: Idle}
+        }
+
+    def start(self):
+        self.cur_state.enter(self.ball, ('NONE', 0))
+
+    def handle_event(self, e):
+        for check_event, next_state in self.transitions[self.cur_state].items():
+            if check_event(e):
+                self.cur_state.exit(self.ball, e)
+                self.cur_state = next_state
+                self.cur_state.enter(self.ball, e)
+                return True
+        return False
 
     def update(self):
-        pass
-    def handle_event(self, event):
+        self.cur_state.do(self.ball)
         pass
 
     def draw(self):
-        self.image.draw(self.x, self.y)
+        self.cur_state.draw(self.ball)
+
+class ball_state:
+    def __init__(self, ball):
+        self.ball = ball
+
+    def start(self):
+        pass
+    def handle_event(self, e):
+        pass
+    def update(self):
+        pass
+
+    def draw(self):
+        self.ball.image.draw(self.ball.x,self.ball.y)
+
+class Ball:
+
+    def __init__(self):
+        self.x, self. y = 400, 300
+        Ball.image = load_image('ball21x21.png')
+        self.dribble_state = 0
+        self.x_dir = 0
+        self.y_dir = 0
+        self.state_mashine = ball_state(self)
+
+    def update(self):
+        self.state_mashine.update()
+
+    def handle_event(self, event):
+        self.state_mashine.handle_event(('INPUT', event))
+
+    def draw(self):
+        self.state_mashine.draw()
         draw_rectangle(*self.get_bb())
     def get_bb(self):
         return self.x-10, self.y-10,self.x+10,self.y+10
 
+
     def handle_collision(self, group, other):
         if group == 'player:ball':
-            self.x +=1
+            if self.dribble_state == 0:
+                self.dribble_state = 1
+                self.state_mashine = StateMachine(self)
+                self.state_mashine.start()
+                print(2)
+            pass

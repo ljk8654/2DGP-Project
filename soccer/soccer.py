@@ -1,7 +1,7 @@
 from pico2d import *
 import world
 from player import Player
-
+from field import Field
 from soccer_ball import Ball
 
 # Game object class here
@@ -18,6 +18,7 @@ def handle_events():
             running = False
         else:
             player.handle_event(event)
+            ball.handle_event(event)
 
 
 def init():
@@ -25,12 +26,16 @@ def init():
     global grass
     global team
     global player
-
+    global field
+    global ball
     running = True
+    field = Field()
     ball = Ball()
     player = Player()
+    world.add_object(field, 0)
+
     world.add_object(player, 1)
-    world.add_object(ball, 0)
+    world.add_object(ball, 1)
     world.add_collision_pair('player:ball',player,ball)
 def finish():
     pass
