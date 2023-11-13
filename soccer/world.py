@@ -1,5 +1,5 @@
 collision_pair = {}
-objects = [[],[]]
+objects = [[],[],[]]
 
 
 def add_collision_pair(group, a, b):

@@ -1,4 +1,5 @@
 from pico2d import *
+import world
 
 def space_down(e):
     return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_SPACE
@@ -34,6 +35,32 @@ def down_down(e):
 def down_up(e):
     return e[0] == 'INPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_DOWN
 
+class Shoot:
+
+    def enter(ball, e):
+        ball.ball_range = 100
+
+        pass
+    @staticmethod
+    def exit(ball, e):
+        pass
+
+    @staticmethod
+    def do(ball):
+        if ball.ball_range > 0:
+            ball.x += ball.x_dir * 10
+            ball.y += ball.y_dir * 10
+            ball.ball_range -= 10
+            print(ball.ball_range)
+        if ball.ball_range == 0:
+            ball.state_mashine = ball_state(ball)
+            ball.dribble_state =0
+            print(2)
+        pass
+
+    @staticmethod
+    def draw(ball):
+        ball.image.draw(ball.x, ball.y)
 
 class Move:
     @staticmethod
@@ -87,7 +114,6 @@ class Move:
     def do(ball):
         ball.x += ball.x_dir * 5
         ball.y += ball.y_dir * 5
-        print(1)
         pass
 
     @staticmethod
@@ -121,7 +147,8 @@ class StateMachine:
             Idle: {right_down: Move, right_up: Move, left_down: Move, left_up: Move, down_down: Move, down_up: Move,
                    up_down: Move, up_up: Move},
             Move: {right_down: Idle, left_down: Idle, right_up: Idle, left_up: Idle, down_down: Idle, up_down: Idle,
-                   up_up: Idle, down_up: Idle}
+                   up_up: Idle, down_up: Idle, space_down: Shoot},
+            Shoot: {right_down: Idle}
         }
 
     def start(self):
@@ -182,6 +209,7 @@ class Ball:
 
     def handle_collision(self, group, other):
         if group == 'player:ball':
+            print(1)
             if self.dribble_state == 0:
                 self.dribble_state = 1
                 self.state_mashine = StateMachine(self)
