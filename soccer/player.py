@@ -54,6 +54,7 @@ class Move:
         player.frame = (player.frame + 1) % 4
         player.x += player.x_dir * 5
         player.y += player.y_dir * 5
+        print(player.x)
         pass
 
     @staticmethod

@@ -38,7 +38,7 @@ def down_up(e):
 class Shoot:
 
     def enter(ball, e):
-        ball.ball_range = 100
+        ball.ball_range = 200
 
         pass
     @staticmethod
@@ -50,6 +50,10 @@ class Shoot:
         if ball.ball_range > 0:
             ball.x += ball.x_dir * 10
             ball.y += ball.y_dir * 10
+            if ball.x < 115 or ball.x > 640:
+                ball.x_dir *= -1
+                ball.y_dir *= -1
+
             ball.ball_range -= 10
             print(ball.ball_range)
         if ball.ball_range == 0:
