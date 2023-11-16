@@ -4,7 +4,7 @@ import world
 from player import Player
 from field import Field
 from soccer_ball import Ball
-
+import game_framework
 # Game object class here
 
 
@@ -14,22 +14,17 @@ def handle_events():
     events = get_events()
     for event in events:
         if event.type == SDL_QUIT:
-            running = False
+            game_framework.quit()
         elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
-            running = False
+            game_framework.quit()
         else:
             player.handle_event(event)
             ball.handle_event(event)
 
 
 def init():
-    global running
-    global grass
-    global team
     global player
-    global field
     global ball
-    running = True
     field = Field()
     ball = Ball()
     player = Player()
@@ -40,6 +35,7 @@ def init():
     world.add_collision_pair('player:ball',player,ball)
 
 def finish():
+    world.clear()
     pass
 
 def update():

@@ -52,8 +52,8 @@ class Move:
     @staticmethod
     def do(player):
         player.frame = (player.frame + 1) % 4
-        player.x += player.x_dir * 5
-        player.y += player.y_dir * 5
+        player.x += player.x_dir * 1
+        player.y += player.y_dir * 1
         print(player.x)
         pass
 

@@ -1,16 +1,9 @@
-from pico2d import *
+from pico2d import open_canvas, delay, close_canvas
+import game_framework
 
-import  soccer
+import soccer as start_mode
 
 open_canvas()
-soccer.init()
-# game loop
-while soccer.running:
-    soccer.handle_events()
-    soccer.update()
-    soccer.draw()
-    delay(0.05)
-# finalization code
-soccer.finish()
-
+game_framework.run(start_mode)
 close_canvas()
+
