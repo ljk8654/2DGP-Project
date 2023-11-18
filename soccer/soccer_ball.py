@@ -1,5 +1,6 @@
 from pico2d import *
 import world
+import soccer
 
 def space_down(e):
     return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_SPACE
@@ -70,44 +71,20 @@ class Move:
     @staticmethod
     def enter(ball, e):
         if right_down(e) or left_up(e):
-            if ball.x_dir == -1:
-                ball.x+= 40
-            if ball.x_dir == 0:
-                ball.x += 20
-            if ball.y_dir == 1:
-                ball.y -= 20
-            if ball.y_dir == -1:
-                ball.y += 20
+            ball.x = soccer.player.x + 20
+            ball.y = soccer.player.y
             ball.x_dir, ball.y_dir = 1, 0
         elif left_down(e) or right_up(e):
-            if ball.x_dir == 1:
-                ball.x-= 40
-            if ball.x_dir == 0:
-                ball.x -= 20
-            if ball.y_dir == 1:
-                ball.y -= 20
-            if ball.y_dir == -1:
-                ball.y += 20
+            ball.x = soccer.player.x - 20
+            ball.y = soccer.player.y
             ball.x_dir, ball.y_dir = -1, 0
         elif up_down(e) or up_up(e):
-            if ball.x_dir == -1:
-                ball.x+= 20
-            if ball.x_dir == 1:
-                ball.x -= 20
-            if ball.y_dir == 0:
-                ball.y += 20
-            if ball.y_dir == -1:
-                ball.y += 40
+            ball.x = soccer.player.x + 5
+            ball.y = soccer.player.y + 20
             ball.y_dir, ball.x_dir = 1, 0
         elif down_down(e) or down_up(e):
-            if ball.x_dir == -1:
-                ball.x+= 20
-            if ball.x_dir == 1:
-                ball.x -= 20
-            if ball.y_dir == 0:
-                ball.y -= 20
-            if ball.y_dir == +1:
-                ball.y -= 40
+            ball.x = soccer.player.x + 5
+            ball.y = soccer.player.y - 20
             ball.y_dir, ball.x_dir = -1, 0
 
     @staticmethod
@@ -116,8 +93,8 @@ class Move:
 
     @staticmethod
     def do(ball):
-        ball.x += ball.x_dir * 5
-        ball.y += ball.y_dir * 5
+        ball.x += ball.x_dir * 1
+        ball.y += ball.y_dir * 1
         pass
 
     @staticmethod
