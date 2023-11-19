@@ -1,5 +1,16 @@
 from pico2d import *
+import game_framework
+# zombie Run Speed
+PIXEL_PER_METER = (10.0 / 0.3)  # 10 pixel 30 cm
+RUN_SPEED_KMPH = 10.0  # Km / Hour
+RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60.0)
+RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
+RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
 
+# zombie Action Speed
+TIME_PER_ACTION = 0.5
+ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
+FRAMES_PER_ACTION = 10.0
 
 def right_down(e):
     return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_RIGHT
@@ -52,11 +63,11 @@ class Move:
     @staticmethod
     def do(player):
         player.frame = (player.frame + 1) % 4
-        player.x += player.x_dir * 1
-        player.y += player.y_dir * 1
-        print(player.x)
+        player.x += player.x_dir * RUN_SPEED_PPS * game_framework.frame_time
+        player.y += player.y_dir * RUN_SPEED_PPS * game_framework.frame_time
+        player.x = clamp(25, player.x, 1280 - 25)
+        player.y = clamp(25, player.y, 1024 - 25)
         pass
-
     @staticmethod
     def draw(player):
         if player.action == 3:
@@ -134,7 +145,6 @@ class Player:
         self.state_mashine.start()
 
     def update(self):
-        self.frame = (self.frame + 1) % 4
         self.state_mashine.update()
 
     def handle_event(self, event):
