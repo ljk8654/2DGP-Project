@@ -1,6 +1,17 @@
 from pico2d import *
 import world
 import soccer
+import game_framework
+PIXEL_PER_METER = (10.0 / 0.3)  # 10 pixel 30 cm
+RUN_SPEED_KMPH = 10.0  # Km / Hour
+RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60.0)
+RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
+RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
+
+# zombie Action Speed
+TIME_PER_ACTION = 0.5
+ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
+FRAMES_PER_ACTION = 10.0
 
 def space_down(e):
     return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_SPACE
@@ -49,8 +60,11 @@ class Shoot:
     @staticmethod
     def do(ball):
         if ball.ball_range > 0:
-            ball.x += ball.x_dir * 10
-            ball.y += ball.y_dir * 10
+            ball.x += ball.x_dir * RUN_SPEED_PPS * game_framework.frame_time
+            ball.y += ball.y_dir * RUN_SPEED_PPS * game_framework.frame_time
+            ball.x = clamp(25, ball.x, 1280 - 25)
+            ball.y = clamp(25, ball.y, 1024 - 25)
+
             if ball.x < 115 or ball.x > 640:
                 ball.x_dir *= -1
                 ball.y_dir *= -1
@@ -93,9 +107,12 @@ class Move:
 
     @staticmethod
     def do(ball):
-        ball.x += ball.x_dir * 1
-        ball.y += ball.y_dir * 1
-        pass
+        ball.x += ball.x_dir * RUN_SPEED_PPS * game_framework.frame_time
+        ball.y += ball.y_dir * RUN_SPEED_PPS * game_framework.frame_time
+        ball.x = clamp(25, ball.x, 1280 - 25)
+        ball.y = clamp(25, ball.y, 1024 - 25)
+
+    pass
 
     @staticmethod
     def draw(ball):

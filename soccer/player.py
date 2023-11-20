@@ -67,6 +67,7 @@ class Move:
         player.y += player.y_dir * RUN_SPEED_PPS * game_framework.frame_time
         player.x = clamp(25, player.x, 1280 - 25)
         player.y = clamp(25, player.y, 1024 - 25)
+
         pass
     @staticmethod
     def draw(player):
