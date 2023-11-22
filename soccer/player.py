@@ -44,17 +44,12 @@ def down_up(e):
 
 
 
-class Move:
+class RunRight:
     @staticmethod
     def enter(player, e):
-        if right_down(e) or left_up(e):
-            player.x_dir, player.action, player.y_dir = 1, 3, 0
-        elif left_down(e) or right_up(e):
-            player.x_dir, player.action, player.y_dir = -1, 1, 0
-        elif up_down(e) or up_up(e):
-            player.y_dir, player.action, player.x_dir = 1, 2, 0
-        elif down_down(e) or down_up(e):
-            player.y_dir, player.action, player.x_dir = -1, 0, 0
+        player.action = 3
+        player.speed = RUN_SPEED_PPS
+        player.dir = 0
 
     @staticmethod
     def exit(player, e):
@@ -62,21 +57,181 @@ class Move:
 
     @staticmethod
     def do(player):
+        player.x += math.cos(player.dir) * player.speed * game_framework.frame_time
+        player.y += math.sin(player.dir) * player.speed * game_framework.frame_time
         player.frame = (player.frame + 1) % 4
-        player.x += player.x_dir * RUN_SPEED_PPS * game_framework.frame_time
-        player.y += player.y_dir * RUN_SPEED_PPS * game_framework.frame_time
-        player.x = clamp(25, player.x, 1280 - 25)
-        player.y = clamp(25, player.y, 1024 - 25)
 
-        pass
-    @staticmethod
     def draw(player):
         if player.action == 3:
-            player.image.clip_composite_draw(player.frame * 40, 43, 40, 43, 0,'h', player.x, player.y,40,43)
+            player.image.clip_composite_draw(player.frame * 40, 43, 40, 43, 0, 'h', player.x, player.y, 40, 43)
         else:
             player.image.clip_draw(player.frame * 40, player.action * 43, 40, 43, player.x, player.y)
-        
 
+class RunRightUp:
+    @staticmethod
+    def enter(player, e):
+        player.action = 2
+        player.speed = RUN_SPEED_PPS
+        player.dir = math.pi / 4.0
+
+    @staticmethod
+    def exit(player, e):
+        pass
+
+    @staticmethod
+    def do(player):
+        player.x += math.cos(player.dir) * player.speed * game_framework.frame_time
+        player.y += math.sin(player.dir) * player.speed * game_framework.frame_time
+        player.frame = (player.frame + 1) % 4
+
+    def draw(player):
+        if player.action == 3:
+            player.image.clip_composite_draw(player.frame * 40, 43, 40, 43, 0, 'h', player.x, player.y, 40, 43)
+        else:
+            player.image.clip_draw(player.frame * 40, player.action * 43, 40, 43, player.x, player.y)
+
+class RunRightDown:
+    @staticmethod
+    def enter(player, e):
+        player.action = 0
+        player.speed = RUN_SPEED_PPS
+        player.dir = -math.pi / 4.0
+
+    @staticmethod
+    def exit(player, e):
+        pass
+
+    @staticmethod
+    def do(player):
+        player.x += math.cos(player.dir) * player.speed * game_framework.frame_time
+        player.y += math.sin(player.dir) * player.speed * game_framework.frame_time
+        player.frame = (player.frame + 1) % 4
+
+    def draw(player):
+        if player.action == 3:
+            player.image.clip_composite_draw(player.frame * 40, 43, 40, 43, 0, 'h', player.x, player.y, 40, 43)
+        else:
+            player.image.clip_draw(player.frame * 40, player.action * 43, 40, 43, player.x, player.y)
+
+class RunLeft:
+    @staticmethod
+    def enter(player, e):
+        player.action = 1
+        player.speed = RUN_SPEED_PPS
+        player.dir = math.pi
+
+    @staticmethod
+    def exit(player, e):
+        pass
+
+    @staticmethod
+    def do(player):
+        player.x += math.cos(player.dir) * player.speed * game_framework.frame_time
+        player.y += math.sin(player.dir) * player.speed * game_framework.frame_time
+
+        player.frame = (player.frame + 1) % 4
+
+    def draw(player):
+        if player.action == 3:
+            player.image.clip_composite_draw(player.frame * 40, 43, 40, 43, 0, 'h', player.x, player.y, 40, 43)
+        else:
+            player.image.clip_draw(player.frame * 40, player.action * 43, 40, 43, player.x, player.y)
+
+class RunLeftUp:
+    @staticmethod
+    def enter(player, e):
+        player.action = 2
+        player.speed = RUN_SPEED_PPS
+        player.dir = math.pi * 3.0 / 4.0
+
+    @staticmethod
+    def exit(player, e):
+        pass
+
+    @staticmethod
+    def do(player):
+        player.x += math.cos(player.dir) * player.speed * game_framework.frame_time
+        player.y += math.sin(player.dir) * player.speed * game_framework.frame_time
+        player.frame = (player.frame + 1) % 4
+
+    def draw(player):
+        if player.action == 3:
+            player.image.clip_composite_draw(player.frame * 40, 43, 40, 43, 0, 'h', player.x, player.y, 40, 43)
+        else:
+            player.image.clip_draw(player.frame * 40, player.action * 43, 40, 43, player.x, player.y)
+
+class RunLeftDown:
+    @staticmethod
+    def enter(player, e):
+        player.action = 0
+        player.speed = RUN_SPEED_PPS
+        player.dir = - math.pi * 3.0 / 4.0
+
+    @staticmethod
+    def exit(player, e):
+        pass
+
+    @staticmethod
+    def do(player):
+        player.x += math.cos(player.dir) * player.speed * game_framework.frame_time
+        player.y += math.sin(player.dir) * player.speed * game_framework.frame_time
+        player.frame = (player.frame + 1) % 4
+
+    def draw(player):
+        if player.action == 3:
+            player.image.clip_composite_draw(player.frame * 40, 43, 40, 43, 0, 'h', player.x, player.y, 40, 43)
+        else:
+            player.image.clip_draw(player.frame * 40, player.action * 43, 40, 43, player.x, player.y)
+class RunUp:
+    @staticmethod
+    def enter(player, e):
+        player.action = 2
+        player.speed = RUN_SPEED_PPS
+        player.dir = math.pi / 2.0
+
+    @staticmethod
+    def exit(player, e):
+        pass
+
+    @staticmethod
+    def do(player):
+        player.x += math.cos(player.dir) * player.speed * game_framework.frame_time
+        player.y += math.sin(player.dir) * player.speed * game_framework.frame_time
+        player.frame = (player.frame + 1) % 4
+
+    def draw(player):
+        if player.action == 3:
+            player.image.clip_composite_draw(player.frame * 40, 43, 40, 43, 0, 'h', player.x, player.y, 40, 43)
+        else:
+            player.image.clip_draw(player.frame * 40, player.action * 43, 40, 43, player.x, player.y)
+class RunDown:
+    @staticmethod
+    def enter(player, e):
+        if player.action == 2:
+            player.action = 0
+        elif player.action == 3:
+            player.action = 1
+        player.speed = RUN_SPEED_PPS
+        player.dir = - math.pi / 2.0
+        pass
+
+    @staticmethod
+    def exit(player, e):
+        pass
+
+    @staticmethod
+    def do(player):
+        player.x += math.cos(player.dir) * player.speed * game_framework.frame_time
+        player.y += math.sin(player.dir) * player.speed * game_framework.frame_time
+        player.frame = (player.frame + 1) % 4
+
+        pass
+
+    def draw(player):
+        if player.action == 3:
+            player.image.clip_composite_draw(player.frame * 40, 43, 40, 43, 0, 'h', player.x, player.y, 40, 43)
+        else:
+            player.image.clip_draw(player.frame * 40, player.action * 43, 40, 43, player.x, player.y)
 
 class Idle:
     @staticmethod
@@ -110,9 +265,20 @@ class StateMachine:
         self.cur_state = Idle
         self.player = player
         self.transitions = {
-            Idle: {right_down: Move, right_up: Move, left_down: Move, left_up: Move, down_down: Move, down_up: Move, up_down: Move, up_up: Move},
-            Move: {right_down: Idle, left_down: Idle, right_up: Idle, left_up: Idle, down_down: Idle, up_down: Idle, up_up: Idle, down_up: Idle}
-        }
+            Idle: {right_down: RunRight, left_down: RunLeft, left_up: RunRight, right_up: RunLeft, up_down: RunUp,
+                   down_down: RunDown, up_up: RunDown, down_up: RunUp},
+            RunRight: {right_up: Idle, left_down: Idle, up_down: RunRightUp, up_up: RunRightDown,
+                       down_down: RunRightDown, down_up: RunRightUp},
+            RunRightUp: {up_up: RunRight, right_up: RunUp, left_down: RunUp, down_down: RunRight},
+            RunUp: {up_up: Idle, left_down: RunLeftUp, down_down: Idle, right_down: RunRightUp,
+                    left_up: RunRightUp, right_up: RunLeftUp},
+            RunLeftUp: {right_down: RunUp, down_down: RunLeft, left_up: RunUp, up_up: RunLeft},
+            RunLeft: {left_up: Idle, up_down: RunLeftUp, right_down: Idle, down_down: RunLeftDown,
+                      up_up: RunLeftDown, down_up: RunLeftUp},
+            RunLeftDown: {left_up: RunDown, down_up: RunLeft, up_down: RunLeft, right_down: RunDown},
+            RunDown: {down_up: Idle, left_down: RunLeftDown, up_down: Idle, right_down: RunRightDown,
+                      left_up: RunRightDown, right_up: RunLeftDown},
+            RunRightDown: {right_up: RunDown, down_up: RunRight, left_down: RunDown, up_down: RunRight}     }
 
     def start(self):
         self.cur_state.enter(self.player, ('NONE', 0))

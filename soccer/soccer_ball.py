@@ -73,6 +73,7 @@ class Shoot:
             print(ball.ball_range)
         if ball.ball_range == 0:
             ball.state_mashine = ball_state(ball)
+            ball.state_mashine.start()
             ball.dribble_state =0
             print(2)
         pass
