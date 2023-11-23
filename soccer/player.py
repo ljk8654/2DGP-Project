@@ -50,6 +50,8 @@ class RunRight:
         player.action = 3
         player.speed = RUN_SPEED_PPS
         player.dir = 0
+        player.x_dir = 1
+        player.y_dir = 0
 
     @staticmethod
     def exit(player, e):
@@ -70,9 +72,11 @@ class RunRight:
 class RunRightUp:
     @staticmethod
     def enter(player, e):
-        player.action = 2
+        player.action = 3
         player.speed = RUN_SPEED_PPS
         player.dir = math.pi / 4.0
+        player.x_dir = 1
+        player.y_dir = 0
 
     @staticmethod
     def exit(player, e):
@@ -93,9 +97,11 @@ class RunRightUp:
 class RunRightDown:
     @staticmethod
     def enter(player, e):
-        player.action = 0
+        player.action = 3
         player.speed = RUN_SPEED_PPS
         player.dir = -math.pi / 4.0
+        player.x_dir = 1
+        player.y_dir = 0
 
     @staticmethod
     def exit(player, e):
@@ -119,6 +125,8 @@ class RunLeft:
         player.action = 1
         player.speed = RUN_SPEED_PPS
         player.dir = math.pi
+        player.x_dir = -1
+        player.y_dir = 0
 
     @staticmethod
     def exit(player, e):
@@ -140,9 +148,11 @@ class RunLeft:
 class RunLeftUp:
     @staticmethod
     def enter(player, e):
-        player.action = 2
+        player.action = 1
         player.speed = RUN_SPEED_PPS
         player.dir = math.pi * 3.0 / 4.0
+        player.x_dir = -1
+        player.y_dir = 0
 
     @staticmethod
     def exit(player, e):
@@ -163,9 +173,11 @@ class RunLeftUp:
 class RunLeftDown:
     @staticmethod
     def enter(player, e):
-        player.action = 0
+        player.action = 1
         player.speed = RUN_SPEED_PPS
         player.dir = - math.pi * 3.0 / 4.0
+        player.x_dir = -1
+        player.y_dir = 0
 
     @staticmethod
     def exit(player, e):
@@ -188,6 +200,8 @@ class RunUp:
         player.action = 2
         player.speed = RUN_SPEED_PPS
         player.dir = math.pi / 2.0
+        player.x_dir = 0
+        player.y_dir = 1
 
     @staticmethod
     def exit(player, e):
@@ -213,6 +227,9 @@ class RunDown:
             player.action = 1
         player.speed = RUN_SPEED_PPS
         player.dir = - math.pi / 2.0
+        player.x_dir = 0
+        player.y_dir = -1
+
         pass
 
     @staticmethod
