@@ -6,11 +6,14 @@ RUN_SPEED_KMPH = 30.0  # Km / Hour
 RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60.0)
 RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
 RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
-
+import soccer
 # zombie Action Speed
 TIME_PER_ACTION = 0.5
 ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
 FRAMES_PER_ACTION = 10.0
+
+def space_down(e):
+    return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_SPACE
 
 def right_down(e):
     return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_RIGHT
@@ -55,8 +58,8 @@ class RunRight:
 
     @staticmethod
     def exit(player, e):
-        pass
-
+        if space_down(e):
+            player.shoot()
     @staticmethod
     def do(player):
         player.x += math.cos(player.dir) * player.speed * game_framework.frame_time
@@ -80,6 +83,9 @@ class RunRightUp:
 
     @staticmethod
     def exit(player, e):
+
+        if space_down(e):
+            player.shoot()
         pass
 
     @staticmethod
@@ -105,6 +111,9 @@ class RunRightDown:
 
     @staticmethod
     def exit(player, e):
+
+        if space_down(e):
+            player.shoot()
         pass
 
     @staticmethod
@@ -260,6 +269,10 @@ class Idle:
 
     @staticmethod
     def exit(player, e):
+
+        if space_down(e):
+            player.shoot()
+            print(1)
         pass
 
     @staticmethod
@@ -301,6 +314,11 @@ class StateMachine:
         self.cur_state.enter(self.player, ('NONE', 0))
 
     def handle_event(self, e):
+        if space_down(e):
+            soccer.ball.shoot = 1
+            soccer.ball.dribble_state = 2
+            print(1111111111111111111)
+
         for check_event, next_state in self.transitions[self.cur_state].items():
             if check_event(e):
                 self.cur_state.exit(self.player, e)
@@ -346,3 +364,8 @@ class Player:
     def handle_collision(self, group, other):
         if group == 'player:ball':
             pass
+
+    def shoot(self):
+        soccer.ball.shoot =1
+        soccer.ball.dribble_state = 2
+        print(1111111111111111111)

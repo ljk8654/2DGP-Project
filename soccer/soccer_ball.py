@@ -55,13 +55,23 @@ class Ball:
         self.x, self. y = 400, 300
         Ball.image = load_image('ball21x21.png')
         self.dribble_state = 0
-        self.x_dir = 0
-        self.y_dir = 0
+        self.shoot = 0
+        self.shoot_range = 100
 
     def update(self):
-        if self.dribble_state == 1:
+        if self.dribble_state != 1 and self.shoot == 1 and self.shoot_range > 0:
+            self.shoot_range -= 10
+            self.x += soccer.player.x_dir * 10
+            self.y += soccer.player.y_dir * 10
+        elif self.dribble_state == 1:
             self.x = soccer.player.x + 10 * soccer.player.x_dir
             self.y = soccer.player.y + 10 * soccer.player.y_dir
+
+        if self.shoot_range == 0:
+            self.shoot_range = 100
+            self.dribble_state = 0
+            self.shoot = 0
+
     def handle_event(self, event):
         pass
     def draw(self):
@@ -74,7 +84,6 @@ class Ball:
 
     def handle_collision(self, group, other):
         if group == 'player:ball':
-            print(1)
             if self.dribble_state == 0:
                 self.dribble_state = 1
             pass
