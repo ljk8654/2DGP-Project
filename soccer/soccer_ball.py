@@ -52,13 +52,14 @@ def down_up(e):
 class Ball:
 
     def __init__(self):
-        self.x, self. y = 400, 300
+        self.x, self. y = 400, 0
         Ball.image = load_image('ball21x21.png')
         self.dribble_state = 0
         self.shoot = 0
         self.shoot_range = 100
 
     def update(self):
+
         if self.dribble_state != 1 and self.shoot == 1 and self.shoot_range > 0:
             self.shoot_range -= 10
             self.x += soccer.player.x_dir * 10
@@ -68,19 +69,30 @@ class Ball:
             self.y = soccer.player.y + 10 * soccer.player.y_dir
 
         if self.shoot_range == 0:
-            self.shoot_range = 100
+            self.shoot_range = 200
             self.dribble_state = 0
             self.shoot = 0
+        self.x = clamp(50, self.x, self.bg.w - 50)
+        self.y = clamp(50, self.y, self.bg.h - 50)
 
     def handle_event(self, event):
         pass
     def draw(self):
-        self.image.draw(self.x, self.y)
+        sx, sy = self.x - self.bg.window_left, self.y - self.bg.window_bottom
+        self.image.draw(sx, sy)
         draw_rectangle(*self.get_bb())
 
     def get_bb(self):
-        return self.x-10, self.y-10,self.x+10,self.y+10
+        sx, sy = self.x - self.bg.window_left, self.y - self.bg.window_bottom
+        return sx - 10, sy - 10, sx + 10, sy + 10
 
+
+    def set_background(self, bg):
+        # fill here
+        self.bg = bg
+        self.x = 500
+        self.y = 400
+        pass
 
     def handle_collision(self, group, other):
         if group == 'player:ball':

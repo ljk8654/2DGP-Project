@@ -7,6 +7,7 @@ RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60.0)
 RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
 RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
 import soccer
+
 # zombie Action Speed
 TIME_PER_ACTION = 0.5
 ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
@@ -67,10 +68,8 @@ class RunRight:
         player.frame = (player.frame + 1) % 4
 
     def draw(player):
-        if player.action == 3:
-            player.image.clip_composite_draw(player.frame * 40, 43, 40, 43, 0, 'h', player.x, player.y, 40, 43)
-        else:
-            player.image.clip_draw(player.frame * 40, player.action * 43, 40, 43, player.x, player.y)
+        sx, sy = player.x - soccer.field.window_left, player.y - soccer.field.window_bottom
+        player.image.clip_composite_draw(player.frame * 40, 43, 40, 43, 0, 'h', sx, sy, 40, 43)
 
 class RunRightUp:
     @staticmethod
@@ -95,10 +94,9 @@ class RunRightUp:
         player.frame = (player.frame + 1) % 4
 
     def draw(player):
-        if player.action == 3:
-            player.image.clip_composite_draw(player.frame * 40, 43, 40, 43, 0, 'h', player.x, player.y, 40, 43)
-        else:
-            player.image.clip_draw(player.frame * 40, player.action * 43, 40, 43, player.x, player.y)
+        sx, sy = player.x - soccer.field.window_left, player.y - soccer.field.window_bottom
+        player.image.clip_composite_draw(player.frame * 40, 43, 40, 43, 0, 'h', sx, sy, 40, 43)
+
 
 class RunRightDown:
     @staticmethod
@@ -123,10 +121,9 @@ class RunRightDown:
         player.frame = (player.frame + 1) % 4
 
     def draw(player):
-        if player.action == 3:
-            player.image.clip_composite_draw(player.frame * 40, 43, 40, 43, 0, 'h', player.x, player.y, 40, 43)
-        else:
-            player.image.clip_draw(player.frame * 40, player.action * 43, 40, 43, player.x, player.y)
+        sx, sy = player.x - soccer.field.window_left, player.y - soccer.field.window_bottom
+        player.image.clip_composite_draw(player.frame * 40, 43, 40, 43, 0, 'h', sx, sy, 40, 43)
+
 
 class RunLeft:
     @staticmethod
@@ -149,10 +146,9 @@ class RunLeft:
         player.frame = (player.frame + 1) % 4
 
     def draw(player):
-        if player.action == 3:
-            player.image.clip_composite_draw(player.frame * 40, 43, 40, 43, 0, 'h', player.x, player.y, 40, 43)
-        else:
-            player.image.clip_draw(player.frame * 40, player.action * 43, 40, 43, player.x, player.y)
+        sx, sy = player.x - soccer.field.window_left, player.y - soccer.field.window_bottom
+        player.image.clip_draw(player.frame * 40, player.action * 43, 40, 43, sx, sy)
+
 
 class RunLeftUp:
     @staticmethod
@@ -174,11 +170,8 @@ class RunLeftUp:
         player.frame = (player.frame + 1) % 4
 
     def draw(player):
-        if player.action == 3:
-            player.image.clip_composite_draw(player.frame * 40, 43, 40, 43, 0, 'h', player.x, player.y, 40, 43)
-        else:
-            player.image.clip_draw(player.frame * 40, player.action * 43, 40, 43, player.x, player.y)
-
+        sx, sy = player.x - soccer.field.window_left, player.y - soccer.field.window_bottom
+        player.image.clip_draw(player.frame * 40, player.action * 43, 40, 43, sx, sy)
 class RunLeftDown:
     @staticmethod
     def enter(player, e):
@@ -199,10 +192,8 @@ class RunLeftDown:
         player.frame = (player.frame + 1) % 4
 
     def draw(player):
-        if player.action == 3:
-            player.image.clip_composite_draw(player.frame * 40, 43, 40, 43, 0, 'h', player.x, player.y, 40, 43)
-        else:
-            player.image.clip_draw(player.frame * 40, player.action * 43, 40, 43, player.x, player.y)
+        sx, sy = player.x - soccer.field.window_left, player.y - soccer.field.window_bottom
+        player.image.clip_draw(player.frame * 40, player.action * 43, 40, 43, sx, sy)
 class RunUp:
     @staticmethod
     def enter(player, e):
@@ -223,17 +214,12 @@ class RunUp:
         player.frame = (player.frame + 1) % 4
 
     def draw(player):
-        if player.action == 3:
-            player.image.clip_composite_draw(player.frame * 40, 43, 40, 43, 0, 'h', player.x, player.y, 40, 43)
-        else:
-            player.image.clip_draw(player.frame * 40, player.action * 43, 40, 43, player.x, player.y)
+        sx, sy = player.x - soccer.field.window_left, player.y - soccer.field.window_bottom
+        player.image.clip_draw(player.frame * 40, player.action * 43, 40, 43, sx, sy)
 class RunDown:
     @staticmethod
     def enter(player, e):
-        if player.action == 2:
-            player.action = 0
-        elif player.action == 3:
-            player.action = 1
+        player.action = 0
         player.speed = RUN_SPEED_PPS
         player.dir = - math.pi / 2.0
         player.x_dir = 0
@@ -254,10 +240,8 @@ class RunDown:
         pass
 
     def draw(player):
-        if player.action == 3:
-            player.image.clip_composite_draw(player.frame * 40, 43, 40, 43, 0, 'h', player.x, player.y, 40, 43)
-        else:
-            player.image.clip_draw(player.frame * 40, player.action * 43, 40, 43, player.x, player.y)
+        sx, sy = player.x - soccer.field.window_left, player.y - soccer.field.window_bottom
+        player.image.clip_draw(player.frame * 40, player.action * 43, 40, 43, sx, sy)
 
 class Idle:
     @staticmethod
@@ -282,13 +266,11 @@ class Idle:
 
     @staticmethod
     def draw(player):
+        sx, sy = player.x - soccer.field.window_left, player.y - soccer.field.window_bottom
         if player.action == 3:
-            player.image.clip_composite_draw(player.frame * 40, 43, 40, 43, 0,'h', player.x, player.y,40,43)
+            player.image.clip_composite_draw(player.frame * 40, 43, 40, 43, 0, 'h', sx, sy, 40, 43)
         else:
-            player.image.clip_draw(player.frame * 40, player.action * 43, 40, 43, player.x, player.y)
-
-        pass
-
+            player.image.clip_draw(player.frame * 40, player.action * 43, 40, 43, sx, sy)
 
 class StateMachine:
     def __init__(self, player):
@@ -317,7 +299,6 @@ class StateMachine:
         if space_down(e):
             soccer.ball.shoot = 1
             soccer.ball.dribble_state = 2
-            print(1111111111111111111)
 
         for check_event, next_state in self.transitions[self.cur_state].items():
             if check_event(e):
@@ -329,6 +310,7 @@ class StateMachine:
 
     def update(self):
         self.cur_state.do(self.player)
+
         pass
 
     def draw(self):
@@ -337,7 +319,7 @@ class StateMachine:
 
 class Player:
     def __init__(self):
-        self.x, self.y = 400, 90
+        self.x, self.y = 800, 600
         self.frame = 0
         self.x_dir = 0
         self.y_dir = 0
@@ -359,7 +341,8 @@ class Player:
 
 
     def get_bb(self):
-        return self.x -20, self.y - 20, self.x+20,self.y+20
+        sx, sy = self.x - soccer.field.window_left, self.y - soccer.field.window_bottom
+        return sx -20, sy - 20, sx+20,sy+20
 
     def handle_collision(self, group, other):
         if group == 'player:ball':
@@ -368,4 +351,4 @@ class Player:
     def shoot(self):
         soccer.ball.shoot =1
         soccer.ball.dribble_state = 2
-        print(1111111111111111111)
+
