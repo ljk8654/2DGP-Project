@@ -78,7 +78,7 @@ class RunRightUp:
         player.speed = RUN_SPEED_PPS
         player.dir = math.pi / 4.0
         player.x_dir = 1
-        player.y_dir = 0
+        player.y_dir = 1
 
     @staticmethod
     def exit(player, e):
@@ -105,7 +105,7 @@ class RunRightDown:
         player.speed = RUN_SPEED_PPS
         player.dir = -math.pi / 4.0
         player.x_dir = 1
-        player.y_dir = 0
+        player.y_dir = -1
 
     @staticmethod
     def exit(player, e):
@@ -157,7 +157,7 @@ class RunLeftUp:
         player.speed = RUN_SPEED_PPS
         player.dir = math.pi * 3.0 / 4.0
         player.x_dir = -1
-        player.y_dir = 0
+        player.y_dir = 1
 
     @staticmethod
     def exit(player, e):
@@ -179,7 +179,7 @@ class RunLeftDown:
         player.speed = RUN_SPEED_PPS
         player.dir = - math.pi * 3.0 / 4.0
         player.x_dir = -1
-        player.y_dir = 0
+        player.y_dir = -1
 
     @staticmethod
     def exit(player, e):
@@ -296,7 +296,7 @@ class StateMachine:
         self.cur_state.enter(self.player, ('NONE', 0))
 
     def handle_event(self, e):
-        if space_down(e):
+        if space_down(e) and soccer.ball.dribble_state == 1:
             soccer.ball.shoot = 1
             soccer.ball.dribble_state = 2
 

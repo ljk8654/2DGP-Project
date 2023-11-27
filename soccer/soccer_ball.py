@@ -69,11 +69,11 @@ class Ball:
             self.y = soccer.player.y + 10 * soccer.player.y_dir
 
         if self.shoot_range == 0:
-            self.shoot_range = 200
+            self.shoot_range = 300
             self.dribble_state = 0
             self.shoot = 0
-        self.x = clamp(50, self.x, self.bg.w - 50)
-        self.y = clamp(50, self.y, self.bg.h - 50)
+        self.x = clamp(110, self.x, self.bg.w - 110)
+        self.y = clamp(10, self.y, self.bg.h - 100)
 
     def handle_event(self, event):
         pass
@@ -90,8 +90,8 @@ class Ball:
     def set_background(self, bg):
         # fill here
         self.bg = bg
-        self.x = 500
-        self.y = 400
+        self.x = self.bg.w//2
+        self.y = self.bg.h//2
         pass
 
     def handle_collision(self, group, other):
