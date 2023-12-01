@@ -61,8 +61,8 @@ class Anemy:
 
     def draw(self):
         sx, sy = self.x - soccer.field.window_left, self.y - soccer.field.window_bottom
-        if self.action == 3:
-            self.image.clip_composite_draw(self.frame * 40, 43, 40, 43, 0, 'h', sx, sy, 40, 43)
+        if self.dir > 0:
+            self.image.clip_composite_draw(self.frame * 35, 43, 35, 43, 0, 'h', sx, sy, 40, 43)
         else:
             self.image.clip_draw(self.frame * 35, 43, 35, 43, sx, sy)
 
@@ -92,24 +92,16 @@ class Anemy:
         self.x += self.speed * math.cos(self.dir) * game_framework.frame_time
         self.y += self.speed * math.sin(self.dir) * game_framework.frame_time
 
-    def move_to(self, r=0.5):
+    def chase_ball (self, r=0.5):
         self.state = 'Walk'
-        self.move_slightly_to(self.tx, self.ty)
-        if self.distance_less_than(self.tx, self.ty, self.x, self.y, r):
+        self.move_slightly_to(soccer.ball.x, soccer.ball.y)
+        if self.distance_less_than(soccer.ball.x, soccer.ball.y, self.x, self.y, r):
             return BehaviorTree.SUCCESS
         else:
             return BehaviorTree.RUNNING
 
-    def set_random_location(self):
-        # select random location around player
-        self.tx = random.randint(int(soccer.player.x) - 600, int(soccer.player.x) + 600)
-        self.ty = random.randint(int(soccer.player.y) - 400, int(soccer.player.y) + 400)
-        return BehaviorTree.SUCCESS
 
-
-
+# 공이 없으면 공을 쫓는다 공이 있으면 상대방 골대로 간다 상대방 골대 근처로 가면 찬다
     def build_behavior_tree(self):
-        a1 = Action('Set random location', self.set_random_location)
-        a2 = Action('Move to', self.move_to)
-        root = SEQ_wander = Sequence('Wander', a1, a2)
+        root = a2 = Action('chase ball', self.move_to)
         self.bt = BehaviorTree(root)
