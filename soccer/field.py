@@ -2,6 +2,7 @@ from pico2d import *
 import soccer
 class Field:
     def __init__(self):
+        self.font = load_font('ENCR10B.TTF', 24)
         self.image = load_image('field.png')
         # fill here
         self.cw = get_canvas_width()  # 화면 너비

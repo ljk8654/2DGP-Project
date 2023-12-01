@@ -23,30 +23,23 @@ FRAMES_PER_ACTION = 10.0
 animation_names = ['Walk', 'Idle']
 
 
-class Zombie:
-    images = None
+class Anemy:
 
-    def load_images(self):
-        if Zombie.images == None:
-            Zombie.images = {}
-            for name in animation_names:
-                Zombie.images[name] = [load_image("./zombie/" + name + " (%d)" % i + ".png") for i in range(1, 11)]
-            Zombie.font = load_font('ENCR10B.TTF', 30)
-            Zombie.marker_image = load_image('hand_arrow.png')
-
+    def load_image(self):
+        Anemy.font = load_font('ENCR10B.TTF', 30)
+        Anemy.image = load_image('soccer_character_blue.png')
+        pass
 
     def __init__(self, name='Noname', x=0, y=0, size=1.0):
         self.name, self.x, self.y, self.size = name, x, y, size
-        self.load_images()
+        self.load_image()
         self.dir = 0.0      # radian 값으로 방향을 표시
         self.speed = 0.0
-        self.frame = random.randint(0, 9)
         self.state = 'Idle'
-
+        self.frame = 1
         self.tx, self.ty = 0, 0
         self.build_behavior_tree()
-
-
+        self.action =0
     def __getstate__(self):
         state = {'name': self.name, 'x': self.x, 'y': self.y, 'size': self.size}
         return state
@@ -62,21 +55,19 @@ class Zombie:
 
 
     def update(self):
-        self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % FRAMES_PER_ACTION
+        self.frame = (self.frame + 1) % 4
         self.bt.run()
 
 
     def draw(self):
         sx, sy = self.x - soccer.field.window_left, self.y - soccer.field.window_bottom
-        if math.cos(self.dir) < 0:
-            Zombie.images[self.state][int(self.frame)].composite_draw(0, 'h', sx, sy, 100*self.size, 100*self.size)
+        if self.action == 3:
+            self.image.clip_composite_draw(self.frame * 40, 43, 40, 43, 0, 'h', sx, sy, 40, 43)
         else:
-            Zombie.images[self.state][int(self.frame)].draw(sx, sy, 100*self.size, 100*self.size)
+            self.image.clip_draw(self.frame * 35, 43, 35, 43, sx, sy)
 
-        # draw name
-        self.font.draw(sx - 50, sy + 60, f'{self.name}', (255, 255, 0))
+    # draw name
         # draw target location
-        self.marker_image.draw(self.tx  - soccer.background.window_left + 25, self.ty - soccer.background.window_bottom - 25, 25, 25)
 
     def handle_event(self, event):
         pass
