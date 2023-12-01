@@ -51,7 +51,8 @@ class Anemy:
 
 
     def get_bb(self):
-        return self.x - 50, self.y - 50, self.x + 50, self.y + 50
+        sx, sy = self.x - soccer.field.window_left, self.y - soccer.field.window_bottom
+        return sx - 50, sy - 50, sx + 50, sy + 50
 
 
     def update(self):
@@ -60,6 +61,7 @@ class Anemy:
 
 
     def draw(self):
+        draw_rectangle(*self.get_bb())
         sx, sy = self.x - soccer.field.window_left, self.y - soccer.field.window_bottom
         if self.dir > 0:
             self.image.clip_composite_draw(self.frame * 35, 43, 35, 43, 0, 'h', sx, sy, 40, 43)
@@ -103,5 +105,5 @@ class Anemy:
 
 # 공이 없으면 공을 쫓는다 공이 있으면 상대방 골대로 간다 상대방 골대 근처로 가면 찬다
     def build_behavior_tree(self):
-        root = a2 = Action('chase ball', self.move_to)
+        root = a2 = Action('chase ball', self.chase_ball)
         self.bt = BehaviorTree(root)

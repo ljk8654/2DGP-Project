@@ -27,6 +27,7 @@ def init():
     global player
     global ball
     global field
+    global anemy
     field = Field()
     ball = Ball()
     player = Player()
@@ -37,6 +38,8 @@ def init():
     world.add_object(player, 2)
     world.add_object(ball, 1)
     world.add_collision_pair('player:ball',player,ball)
+
+    world.add_collision_pair('anemy:ball', anemy, ball)
 
 def finish():
     world.clear()

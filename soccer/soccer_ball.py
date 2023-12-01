@@ -101,4 +101,6 @@ class Ball:
         if group == 'player:ball':
             if self.dribble_state == 0:
                 self.dribble_state = 1
+        if group == 'anemy:ball':
+            print(1)
             pass
