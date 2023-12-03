@@ -94,6 +94,7 @@ class Anemy:
         self.x += self.speed * math.cos(self.dir) * game_framework.frame_time
         self.y += self.speed * math.sin(self.dir) * game_framework.frame_time
 
+
     def chase_ball (self, r=0.5):
         self.state = 'Walk'
         self.move_slightly_to(soccer.ball.x, soccer.ball.y)
@@ -102,8 +103,22 @@ class Anemy:
         else:
             return BehaviorTree.RUNNING
 
+    def ball_owner(self):
+        if soccer.ball.dribble_state == 2:
+            return BehaviorTree.SUCCESS
+        else:
+            return BehaviorTree.FAIL
+    def move_goalpost(self, r= 0.5):
+        self.state = 'Walk'
+        self.move_slightly_to(300, 420)
+        if self.distance_less_than(300, 420, self.x, self.y, r):
+            return BehaviorTree.SUCCESS
+        else:
+            return BehaviorTree.RUNNING
 
 # 공이 없으면 공을 쫓는다 공이 있으면 상대방 골대로 간다 상대방 골대 근처로 가면 찬다
     def build_behavior_tree(self):
-        root = a2 = Action('chase ball', self.chase_ball)
+        a1 = Action('chase ball', self.chase_ball)
+        c1 = Condition('볼 소유', self.ball_owner)
+        root = a2 = Action('상대방 골대로 간다', self.move_goalpost)
         self.bt = BehaviorTree(root)

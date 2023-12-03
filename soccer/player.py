@@ -259,7 +259,6 @@ class Idle:
 
     @staticmethod
     def do(player):
-        player.frame = (player.frame + 1) % 4
         pass
 
     @staticmethod
@@ -318,7 +317,7 @@ class StateMachine:
 
 class Player:
     def __init__(self):
-        self.x, self.y = 800, 600
+        self.x, self.y = 650, 420
         self.frame = 0
         self.x_dir = 0
         self.y_dir = 0
@@ -349,5 +348,5 @@ class Player:
 
     def shoot(self):
         soccer.ball.shoot =1
-        soccer.ball.dribble_state = 2
+        soccer.ball.dribble_state = 3
 

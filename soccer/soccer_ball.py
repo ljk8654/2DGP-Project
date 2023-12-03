@@ -59,6 +59,7 @@ class Ball:
         self.shoot_range = 400
         self.x_dir,self.y_dir = 0, 0
     def update(self):
+        # 플레이어 슛
 
         if self.dribble_state != 1 and self.shoot == 1 and self.shoot_range > 0:
             self.shoot_range -= 10
@@ -69,7 +70,16 @@ class Ball:
         elif self.dribble_state == 1:
             self.x = soccer.player.x + 10 * soccer.player.x_dir
             self.y = soccer.player.y + 10 * soccer.player.y_dir
-
+        # 적 슛
+        if self.dribble_state != 1 and self.shoot == 1 and self.shoot_range > 0:
+            self.shoot_range -= 10
+            self.x += self.x_dir * RUN_SPEED_PPS * game_framework.frame_time
+            self.y += self.y_dir * 5
+            if self.y > self.bg.h - 150 or self.y < 150:
+                self.y_dir *= -1
+        elif self.dribble_state == 2:
+            self.x = soccer.anemy.x + 10 * math.cos(soccer.anemy.dir) * game_framework.frame_time
+            self.y = soccer.anemy.y + 10 * math.cos(soccer.anemy.dir) * game_framework.frame_time
 
         if self.shoot_range == 0:
             self.shoot_range = 400
@@ -98,9 +108,16 @@ class Ball:
         pass
 
     def handle_collision(self, group, other):
-        if group == 'player:ball':
-            if self.dribble_state == 0:
-                self.dribble_state = 1
+
         if group == 'anemy:ball':
-            print(1)
+            if self.dribble_state == 1 or 0 or 3:
+                self.dribble_state = 2
+                self.shoot_range = 400
+                self.shoot = 0
+        if group == 'player:ball':
+            if self.dribble_state == 0 or 2 or 3:
+                self.dribble_state = 1
+                self.shoot_range = 400
+                self.shoot = 0
+                print(1)
             pass
