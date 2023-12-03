@@ -6,6 +6,7 @@ from field import Field
 from soccer_ball import Ball
 import game_framework
 from anemy import Anemy
+from score import Score
 # Game object class here
 
 
@@ -32,9 +33,12 @@ def init():
     ball = Ball()
     player = Player()
     anemy = Anemy()
+    score = Score()
     world.add_object(field, 0)
     ball.set_background(field)
+    score.set_background(field)
     world.add_object(anemy, 2)
+    world.add_object(score, 2)
     world.add_object(player, 2)
     world.add_object(ball, 1)
     world.add_collision_pair('player:ball',player,ball)

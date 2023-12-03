@@ -141,5 +141,6 @@ class Anemy:
         a2 = Action('상대방 골대로 간다', self.move_goalpost)
         a3 = Action('공을 찬다', self.ball_shoot)
         SEQ_OWNER_GOALPOST = Sequence('공을 가지고 있으면 상대방 골대로 간다', c1, a2)
-        root = SEQ_OWNER_GOAL = Sequence('공을 가지고 있으면 상대방 골대로 간다', SEQ_OWNER_GOALPOST, a3)
+        SEL_ball_chase_or_move = Selector('공이 없으면 공을 추적, 있으면 골대로', SEQ_OWNER_GOALPOST, a1)
+        root = SEQ_OWNER_GOAL = Sequence(' 골대근처에 있으면 공을 찬다', SEL_ball_chase_or_move, a3)
         self.bt = BehaviorTree(root)
