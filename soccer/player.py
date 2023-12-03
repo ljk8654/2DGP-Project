@@ -294,8 +294,9 @@ class StateMachine:
 
     def handle_event(self, e):
         if space_down(e) and soccer.ball.dribble_state == 1:
+            soccer.ball.player_shoot = 1
             soccer.ball.shoot = 1
-            soccer.ball.dribble_state = 2
+            soccer.ball.dribble_state = 0
             soccer.ball.x_dir = self.player.x_dir
             soccer.ball.y_dir = self.player.y_dir
         for check_event, next_state in self.transitions[self.cur_state].items():
@@ -346,7 +347,5 @@ class Player:
         if group == 'player:ball':
             pass
 
-    def shoot(self):
-        soccer.ball.shoot =1
-        soccer.ball.dribble_state = 3
+
 

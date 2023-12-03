@@ -30,10 +30,12 @@ class Anemy:
         Anemy.image = load_image('soccer_character_blue.png')
         pass
 
-    def __init__(self, name='Noname', x=0, y=0, size=1.0):
+    def __init__(self, name='Noname', x=1000, y=420, size=1.0):
         self.name, self.x, self.y, self.size = name, x, y, size
         self.load_image()
         self.dir = 0.0      # radian 값으로 방향을 표시
+        self.xdir = -1
+        self.ydir = 0
         self.speed = 0.0
         self.state = 'Idle'
         self.frame = 1
@@ -52,7 +54,7 @@ class Anemy:
 
     def get_bb(self):
         sx, sy = self.x - soccer.field.window_left, self.y - soccer.field.window_bottom
-        return sx - 50, sy - 50, sx + 50, sy + 50
+        return sx - 20, sy - 20, sx + 20, sy + 20
 
 
     def update(self):
@@ -63,7 +65,7 @@ class Anemy:
     def draw(self):
         draw_rectangle(*self.get_bb())
         sx, sy = self.x - soccer.field.window_left, self.y - soccer.field.window_bottom
-        if self.dir > 0:
+        if self.xdir > 0:
             self.image.clip_composite_draw(self.frame * 35, 43, 35, 43, 0, 'h', sx, sy, 40, 43)
         else:
             self.image.clip_draw(self.frame * 35, 43, 35, 43, sx, sy)
@@ -90,6 +92,14 @@ class Anemy:
 
     def move_slightly_to(self, tx, ty):
         self.dir = math.atan2(ty - self.y, tx - self.x)
+        if(tx - self.x < 0):
+            self.xdir = -1
+        else:
+            self.xdir = 1
+        if (ty - self.y < 0):
+            self.ydir = -1
+        else:
+            self.ydir = 1
         self.speed = RUN_SPEED_PPS
         self.x += self.speed * math.cos(self.dir) * game_framework.frame_time
         self.y += self.speed * math.sin(self.dir) * game_framework.frame_time
@@ -115,10 +125,21 @@ class Anemy:
             return BehaviorTree.SUCCESS
         else:
             return BehaviorTree.RUNNING
+    def ball_shoot(self):
+        soccer.ball.x_dir = self.xdir
+        soccer.ball.y_dir = self.ydir
+        print(self.xdir)
+        soccer.ball.dribble_state = 0
+        soccer.ball.shoot = 2
+        soccer.ball.anemy_shoot = 1
+        return BehaviorTree.SUCCESS
 
-# 공이 없으면 공을 쫓는다 공이 있으면 상대방 골대로 간다 상대방 골대 근처로 가면 찬다
+    # 공이 없으면 공을 쫓는다 공이 있으면 상대방 골대로 간다 상대방 골대 근처로 가면 찬다
     def build_behavior_tree(self):
         a1 = Action('chase ball', self.chase_ball)
         c1 = Condition('볼 소유', self.ball_owner)
-        root = a2 = Action('상대방 골대로 간다', self.move_goalpost)
+        a2 = Action('상대방 골대로 간다', self.move_goalpost)
+        a3 = Action('공을 찬다', self.ball_shoot)
+        SEQ_OWNER_GOALPOST = Sequence('공을 가지고 있으면 상대방 골대로 간다', c1, a2)
+        root = SEQ_OWNER_GOAL = Sequence('공을 가지고 있으면 상대방 골대로 간다', SEQ_OWNER_GOALPOST, a3)
         self.bt = BehaviorTree(root)
