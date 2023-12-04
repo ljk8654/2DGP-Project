@@ -36,7 +36,6 @@ def init():
     score = Score()
     world.add_object(field, 0)
     ball.set_background(field)
-    score.set_background(field)
     world.add_object(anemy, 2)
     world.add_object(score, 2)
     world.add_object(player, 2)
