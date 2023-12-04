@@ -9,12 +9,12 @@ import soccer
 
 
 # zombie Run Speed
-PIXEL_PER_METER = (10.0 / 0.3)  # 10 pixel 30 cm
-RUN_SPEED_KMPH = 10.0  # Km / Hour
+PIXEL_PER_METER = (14.8 / 0.1)  # 10 pixel 30 cm
+RUN_SPEED_KMPH = 5.0  # Km / Hour
 RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60.0)
 RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
 RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
-
+print(RUN_SPEED_PPS)
 # zombie Action Speed
 TIME_PER_ACTION = 0.5
 ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
@@ -36,7 +36,7 @@ class Anemy:
         self.dir = 0.0      # radian 값으로 방향을 표시
         self.xdir = -1
         self.ydir = 0
-        self.speed = 0.0
+        self.speed = RUN_SPEED_PPS
         self.state = 'Idle'
         self.frame = 1
         self.tx, self.ty = 0, 0
@@ -79,12 +79,6 @@ class Anemy:
     def handle_collision(self, group, other):
         pass
 
-    def set_target_location(self, x=None, y=None):
-        if not x or not y:
-            raise ValueError('Location should be given')
-        self.tx, self.ty = x, y
-        return BehaviorTree.SUCCESS
-
 
     def distance_less_than(self, x1, y1, x2, y2, r):
         distance2 = (x1 - x2) ** 2 + (y1 - y2) ** 2
@@ -100,12 +94,11 @@ class Anemy:
             self.ydir = -1
         else:
             self.ydir = 1
-        self.speed = RUN_SPEED_PPS
         self.x += self.speed * math.cos(self.dir) * game_framework.frame_time
         self.y += self.speed * math.sin(self.dir) * game_framework.frame_time
 
 
-    def chase_ball (self, r=0.5):
+    def chase_ball (self, r=0.1):
         self.state = 'Walk'
         self.move_slightly_to(soccer.ball.x, soccer.ball.y)
         if self.distance_less_than(soccer.ball.x, soccer.ball.y, self.x, self.y, r):
@@ -118,8 +111,9 @@ class Anemy:
             return BehaviorTree.SUCCESS
         else:
             return BehaviorTree.FAIL
-    def move_goalpost(self, r= 0.5):
-        self.state = 'Walk'
+    def move_goalpost(self, r= 0.1):
+        self.state = 'RUN'
+        self.speed = RUN_SPEED_PPS * 2
         self.move_slightly_to(300, 420)
         if self.distance_less_than(300, 420, self.x, self.y, r):
             return BehaviorTree.SUCCESS
@@ -133,14 +127,47 @@ class Anemy:
         soccer.ball.shoot = 2
         soccer.ball.anemy_shoot = 1
         return BehaviorTree.SUCCESS
+    def is_run(self, r= 0.1):
+        print(777777777777777777777777777777)
+        self.speed = RUN_SPEED_PPS * 2
 
-    # 공이 없으면 공을 쫓는다 공이 있으면 상대방 골대로 간다 상대방 골대 근처로 가면 찬다
+        self.state = 'Walk'
+        self.move_slightly_to(soccer.ball.x, soccer.ball.y)
+        if self.distance_less_than(soccer.ball.x, soccer.ball.y, self.x, self.y, r):
+            return BehaviorTree.SUCCESS
+        else:
+            return BehaviorTree.RUNNING
+
+
+    def is_walk(self, r = 0.1):
+        self.state = 'Walk'
+        self.speed = RUN_SPEED_PPS
+        self.move_slightly_to(soccer.ball.x, soccer.ball.y)
+        if self.distance_less_than(soccer.ball.x, soccer.ball.y, self.x, self.y, r):
+            return BehaviorTree.SUCCESS
+        else:
+            return BehaviorTree.RUNNING
+
+
+    def is_ball_nearby(self, r = 1):
+        print(8888888888888888888888)
+        if self.distance_less_than(soccer.ball.x, soccer.ball.y, self.x, self.y, r):
+            return BehaviorTree.SUCCESS
+        else:
+            return BehaviorTree.FAIL
+
+
     def build_behavior_tree(self):
         a1 = Action('chase ball', self.chase_ball)
         c1 = Condition('볼 소유', self.ball_owner)
         a2 = Action('상대방 골대로 간다', self.move_goalpost)
         a3 = Action('공을 찬다', self.ball_shoot)
+        a4 = Action('달린다',self.is_run)
+        a5 = Action('걷는다', self.is_walk)
+        c2 = Condition('공이 근처에 있는가?', self.is_ball_nearby)
+        SEQ_nearly_run = Sequence('공이 근처에 있으면 뛴다', c2, a4)
+        SEL_run_or_walk = Selector('뛰거나 걷는다',SEQ_nearly_run, a5)
         SEQ_OWNER_GOALPOST = Sequence('공을 가지고 있으면 상대방 골대로 간다', c1, a2)
-        SEL_ball_chase_or_move = Selector('공이 없으면 공을 추적, 있으면 골대로', SEQ_OWNER_GOALPOST, a1)
+        SEL_ball_chase_or_move = Selector('공이 없으면 공을 추적, 있으면 골대로', SEQ_OWNER_GOALPOST, SEL_run_or_walk)
         root = SEQ_OWNER_GOAL = Sequence(' 골대근처에 있으면 공을 찬다', SEL_ball_chase_or_move, a3)
         self.bt = BehaviorTree(root)

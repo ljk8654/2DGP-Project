@@ -29,6 +29,7 @@ def init():
     global ball
     global field
     global anemy
+    global score
     field = Field()
     ball = Ball()
     player = Player()

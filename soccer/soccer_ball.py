@@ -98,6 +98,25 @@ class Ball:
         self.x = clamp(110, self.x, self.bg.w - 110)
         self.y = clamp(140, self.y, self.bg.h - 100)
 
+        if (self.x == 110 or self.x == self.bg.w - 110) and self.y > 350 and self.y < 550:
+            if self.x == 110:
+                soccer.score.anemy_score += 1
+            if self.x == self.bg.w - 110:
+                soccer.score.player_score += 1
+            soccer.anemy.x, soccer.anemy.y = 1000, 420
+            soccer.player.x, soccer.player.y = 600, 420
+            self.x = self.bg.w // 2
+            self.y = self.bg.h // 2
+            self.dribble_state = 0
+            self.shoot = 0
+            self.shoot_range = 400
+            self.x_dir, self.y_dir = 0, 0
+            self.player_shoot = 0
+            self.anemy_shoot = 0
+            self.frame = 0
+            self.x_move = 0
+            self.y_move = 0
+
         if self.x < self.x_move:
             self.frame = (self.frame + 1) % 4
         elif self.x == self.x_move and self.y_move == self.y:
@@ -106,6 +125,8 @@ class Ball:
             self.frame = (self.frame - 1) % 4
         self.x_move = self.x
         self.y_move = self.y
+
+
     def handle_event(self, event):
         pass
     def draw(self):

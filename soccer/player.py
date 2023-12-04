@@ -1,7 +1,7 @@
 from pico2d import *
 import game_framework
 PIXEL_PER_METER = (1480.0 / 10)  # 10 pixel 30 cm
-RUN_SPEED_KMPH = 10.0  # Km / Hour
+RUN_SPEED_KMPH = 5.0  # Km / Hour
 RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60.0)
 RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
 RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
@@ -9,7 +9,13 @@ import soccer
 
 TIME_PER_ACTION = 0.5
 ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
-FRAMES_PER_ACTION = 10.0
+FRAMES_PER_ACTION = 4.0
+
+def e_down(e):
+    return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_e
+
+def e_up(e):
+    return e[0] == 'INPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_e
 
 def space_down(e):
     return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_SPACE
@@ -50,7 +56,6 @@ class RunRight:
     @staticmethod
     def enter(player, e):
         player.action = 3
-        player.speed = RUN_SPEED_PPS
         player.dir = 0
         player.x_dir = 1
         player.y_dir = 0
@@ -73,7 +78,6 @@ class RunRightUp:
     @staticmethod
     def enter(player, e):
         player.action = 3
-        player.speed = RUN_SPEED_PPS
         player.dir = math.pi / 4.0
         player.x_dir = 1
         player.y_dir = 1
@@ -100,7 +104,6 @@ class RunRightDown:
     @staticmethod
     def enter(player, e):
         player.action = 3
-        player.speed = RUN_SPEED_PPS
         player.dir = -math.pi / 4.0
         player.x_dir = 1
         player.y_dir = -1
@@ -127,7 +130,6 @@ class RunLeft:
     @staticmethod
     def enter(player, e):
         player.action = 1
-        player.speed = RUN_SPEED_PPS
         player.dir = math.pi
         player.x_dir = -1
         player.y_dir = 0
@@ -152,7 +154,6 @@ class RunLeftUp:
     @staticmethod
     def enter(player, e):
         player.action = 1
-        player.speed = RUN_SPEED_PPS
         player.dir = math.pi * 3.0 / 4.0
         player.x_dir = -1
         player.y_dir = 1
@@ -174,7 +175,6 @@ class RunLeftDown:
     @staticmethod
     def enter(player, e):
         player.action = 1
-        player.speed = RUN_SPEED_PPS
         player.dir = - math.pi * 3.0 / 4.0
         player.x_dir = -1
         player.y_dir = -1
@@ -196,7 +196,6 @@ class RunUp:
     @staticmethod
     def enter(player, e):
         player.action = 2
-        player.speed = RUN_SPEED_PPS
         player.dir = math.pi / 2.0
         player.x_dir = 0
         player.y_dir = 1
@@ -218,7 +217,6 @@ class RunDown:
     @staticmethod
     def enter(player, e):
         player.action = 0
-        player.speed = RUN_SPEED_PPS
         player.dir = - math.pi / 2.0
         player.x_dir = 0
         player.y_dir = -1
@@ -299,6 +297,12 @@ class StateMachine:
             soccer.ball.dribble_state = 0
             soccer.ball.x_dir = self.player.x_dir
             soccer.ball.y_dir = self.player.y_dir
+
+        if  e_down(e):
+            self.player.speed *= 2
+        if  e_up(e):
+            self.player.speed /= 2
+
         for check_event, next_state in self.transitions[self.cur_state].items():
             if check_event(e):
                 self.cur_state.exit(self.player, e)
@@ -326,7 +330,7 @@ class Player:
         self.image = load_image('soccer_character_red.png')
         self.state_mashine = StateMachine(self)
         self.state_mashine.start()
-
+        self.speed = RUN_SPEED_PPS
     def update(self):
         self.state_mashine.update()
 
