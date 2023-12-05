@@ -14,6 +14,8 @@ FRAMES_PER_ACTION = 4.0
 
 def e_down(e):
     return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_e
+def r_down(e):
+    return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_r
 
 def s_down(e):
     return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_s
@@ -307,6 +309,11 @@ class StateMachine:
 
         if  e_down(e):
             self.player.speed *= 2
+        if  r_down(e):
+            if self.player.font_on == 1:
+                self.player.font_on = 0
+            else:
+                self.player.font_on = 1
         if  e_up(e):
             self.player.speed /= 2
 
@@ -332,7 +339,12 @@ class StateMachine:
         pass
 
     def draw(self):
+        sx, sy = self.player.x - soccer.field.window_left, self.player.y - soccer.field.window_bottom
         self.cur_state.draw(self.player)
+        if self.player.font_on == 0:
+            self.player.font.draw(sx + 42, sy+15, 'e: run', (255, 255, 255))
+            self.player.font.draw(sx + 42, sy, 'space: shoot', (255, 255, 255))
+            self.player.font.draw(sx + 42, sy-15, 'r: font off', (255, 255, 255))
 
 
 class Player:
@@ -342,7 +354,8 @@ class Player:
         self.shoot_sound.set_volume(32)
         self.move_sound = load_wav('move_sound.flac')
         self.move_sound.set_volume(32)
-
+        self.font = load_font('ENCR10B.TTF', 15)
+        self.font_on = 0
         self.stop = 0
         self.x, self.y = 650, 420
         self.old_x, self.old_y = 650, 420
