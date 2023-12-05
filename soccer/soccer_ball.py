@@ -63,7 +63,6 @@ class Ball:
         self.frame = 0
         self.x_move = 0
         self.y_move = 0
-
     def update(self):
         # 플레이어 슛
 

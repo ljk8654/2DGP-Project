@@ -59,6 +59,8 @@ def update():
             world.handle_collisions()
 
         if  score.timer - score.time > 0:
+             print(score.time)
+             print(score.timer)
              game_framework.change_mode(end_mode)
 
 
@@ -66,4 +68,3 @@ def draw():
     clear_canvas()
     world.render()
     update_canvas()
-

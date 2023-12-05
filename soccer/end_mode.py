@@ -18,7 +18,11 @@ def finish():
 def update():
     global running
     if get_time() - logo_start_time >= 2.0:
+        soccer.score.timer = 0
+        soccer.score.time = 180
         game_framework.change_mode(soccer)
+
+
     pass
 
 def draw():

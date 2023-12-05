@@ -7,8 +7,8 @@ class Score:
         self.image = load_image('soccer_score.png')
         self.player_score = 0
         self.anemy_score = 0
-        self.time = 5
-        self.timer = 0
+        self.time = int(get_time()) + 5
+        self.timer = int(get_time())
 
         # fill here
         self.x = 150

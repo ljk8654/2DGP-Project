@@ -296,6 +296,7 @@ class StateMachine:
         if s_down(e):
             self.player.stop = 0
         if space_down(e) and soccer.ball.dribble_state == 1:
+            self.player.shoot_sound.play()
             soccer.ball.player_shoot = 1
             soccer.ball.shoot = 1
             soccer.ball.dribble_state = 0
@@ -326,6 +327,9 @@ class StateMachine:
 
 class Player:
     def __init__(self):
+
+        self.shoot_sound = load_wav('ball_sound.mp3')
+        self.shoot_sound.set_volume(32)
         self.stop = 0
         self.x, self.y = 650, 420
         self.frame = 0

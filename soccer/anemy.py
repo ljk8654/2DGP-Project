@@ -31,6 +31,9 @@ class Anemy:
         pass
 
     def __init__(self, name='Noname', x=1000, y=420, size=1.0):
+
+        self.shoot_sound = load_wav('ball_sound.mp3')
+        self.shoot_sound.set_volume(32)
         self.name, self.x, self.y, self.size = name, x, y, size
         self.load_image()
         self.dir = 0.0      # radian 값으로 방향을 표시
@@ -121,6 +124,7 @@ class Anemy:
             return BehaviorTree.RUNNING
     def ball_shoot(self):
         self.xdir = -1
+        self.shoot_sound.play()
         soccer.ball.x_dir = self.xdir
         soccer.ball.y_dir = self.ydir
         print(self.xdir)
