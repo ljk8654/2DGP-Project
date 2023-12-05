@@ -1,5 +1,7 @@
 from pico2d import *
 import soccer
+import end_mode
+
 class Goal:
     def __init__(self):
         self.font = load_font('ENCR10B.TTF', 20)

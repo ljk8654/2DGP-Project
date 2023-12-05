@@ -1,12 +1,13 @@
 from pico2d import *
 import soccer
+import end_mode
 class Score:
     def __init__(self):
         self.font = load_font('ENCR10B.TTF', 15)
         self.image = load_image('soccer_score.png')
         self.player_score = 0
         self.anemy_score = 0
-        self.time = 90
+        self.time = 5
         self.timer = 0
 
         # fill here
@@ -28,6 +29,7 @@ class Score:
             # fill here
             if soccer.player.stop == 0:
                 self.timer = int(get_time())
+
 
             pass
 

@@ -1,6 +1,6 @@
 from pico2d import load_image, clear_canvas, update_canvas, get_events, get_time
 from sdl2 import SDL_KEYDOWN, SDLK_ESCAPE, SDLK_SPACE
-import play_mode
+import soccer
 import game_framework
 
 def init():
@@ -24,6 +24,6 @@ def handle_events():
         if event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
             game_framework.quit()
         elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_SPACE):
-            game_framework.change_mode(play_mode)
+            game_framework.change_mode(soccer)
     pass
 

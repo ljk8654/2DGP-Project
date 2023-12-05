@@ -1,6 +1,6 @@
 from pico2d import *
 import world
-
+import end_mode
 from player import Player
 from field import Field
 from soccer_ball import Ball
@@ -26,6 +26,7 @@ def handle_events():
 
 
 def init():
+    global score
     global player
     global ball
     global field
@@ -56,6 +57,9 @@ def update():
         if player.stop == 0:
             world.update()
             world.handle_collisions()
+
+        if  score.timer - score.time > 0:
+             game_framework.change_mode(end_mode)
 
 
 def draw():

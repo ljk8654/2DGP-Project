@@ -9,7 +9,8 @@ class Field:
         self.ch = get_canvas_height()  # 화면 높이
         self.w = self.image.w  # 배경의 너비
         self.h = self.image.h  # 배경의 높이
-
+        self.window_left=0
+        self.window_bottom=0
         pass
 
     def draw(self):
