@@ -1,5 +1,6 @@
 from pico2d import *
 import game_framework
+import schedule
 PIXEL_PER_METER = (1480.0 / 10)  # 10 pixel 30 cm
 RUN_SPEED_KMPH = 5.0  # Km / Hour
 RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60.0)
@@ -232,6 +233,7 @@ class RunDown:
 
     @staticmethod
     def do(player):
+
         player.x += math.cos(player.dir) * player.speed * game_framework.frame_time
         player.y += math.sin(player.dir) * player.speed * game_framework.frame_time
         player.frame = (player.frame + 1) % 4
@@ -317,6 +319,14 @@ class StateMachine:
         return False
 
     def update(self):
+        if self.cur_state != Idle:
+            if self.player.x > self.player.old_x + 75 or self.player.x < self.player.old_x - 75:
+                self.player.old_x = self.player.x
+                self.player.move_sound.play()
+            if self.player.y > self.player.old_y + 75 or self.player.y < self.player.old_y - 75:
+                self.player.old_y = self.player.y
+                self.player.move_sound.play()
+
         self.cur_state.do(self.player)
 
         pass
@@ -330,8 +340,12 @@ class Player:
 
         self.shoot_sound = load_wav('ball_sound.mp3')
         self.shoot_sound.set_volume(32)
+        self.move_sound = load_wav('move_sound.flac')
+        self.move_sound.set_volume(32)
+
         self.stop = 0
         self.x, self.y = 650, 420
+        self.old_x, self.old_y = 650, 420
         self.frame = 0
         self.x_dir = 0
         self.y_dir = 0

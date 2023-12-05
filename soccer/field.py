@@ -11,6 +11,9 @@ class Field:
         self.h = self.image.h  # 배경의 높이
         self.window_left=0
         self.window_bottom=0
+        self.bgm = load_music('easy joy.ogg')
+        self.bgm.set_volume(16)
+        self.bgm.repeat_play()
         pass
 
     def draw(self):
