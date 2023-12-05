@@ -7,6 +7,7 @@ from soccer_ball import Ball
 import game_framework
 from anemy import Anemy
 from score import Score
+from goal import Goal
 # Game object class here
 
 
@@ -31,6 +32,7 @@ def init():
     global anemy
     global score
     field = Field()
+    goal = Goal()
     ball = Ball()
     player = Player()
     anemy = Anemy()
@@ -38,6 +40,7 @@ def init():
     world.add_object(field, 0)
     ball.set_background(field)
     world.add_object(anemy, 2)
+    world.add_object(goal, 2)
     world.add_object(score, 2)
     world.add_object(player, 2)
     world.add_object(ball, 1)
@@ -50,8 +53,9 @@ def finish():
     pass
 
 def update():
-        world.update()
-        world.handle_collisions()
+        if player.stop == 0:
+            world.update()
+            world.handle_collisions()
 
 
 def draw():

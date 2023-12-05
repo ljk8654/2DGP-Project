@@ -10,7 +10,7 @@ import soccer
 
 # zombie Run Speed
 PIXEL_PER_METER = (14.8 / 0.1)  # 10 pixel 30 cm
-RUN_SPEED_KMPH = 5.0  # Km / Hour
+RUN_SPEED_KMPH = 3.0  # Km / Hour
 RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60.0)
 RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
 RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
@@ -114,12 +114,13 @@ class Anemy:
     def move_goalpost(self, r= 0.1):
         self.state = 'RUN'
         self.speed = RUN_SPEED_PPS * 2
-        self.move_slightly_to(300, 420)
-        if self.distance_less_than(300, 420, self.x, self.y, r):
+        self.move_slightly_to(300, 480)
+        if self.distance_less_than(300, 480, self.x, self.y, r):
             return BehaviorTree.SUCCESS
         else:
             return BehaviorTree.RUNNING
     def ball_shoot(self):
+        self.xdir = -1
         soccer.ball.x_dir = self.xdir
         soccer.ball.y_dir = self.ydir
         print(self.xdir)

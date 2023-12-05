@@ -6,7 +6,9 @@ class Score:
         self.image = load_image('soccer_score.png')
         self.player_score = 0
         self.anemy_score = 0
+        self.time = 90
         self.timer = 0
+
         # fill here
         self.x = 150
         self.y = 550
@@ -18,12 +20,14 @@ class Score:
         self.image.draw(self.x, self.y)
         self.font.draw(self.x - 92, self.y, f'{self.player_score:02d}', (255, 255, 0))
         self.font.draw(self.x + 66, self.y, f'{self.anemy_score:02d}', (255, 255, 0))
-        self.font.draw(self.x - 10 , self.y, f'{self.timer:02d}', (255, 255, 0))
+        self.font.draw(self.x - 10 , self.y, f'{self.time - self.timer:02d}', (255, 255, 0))
 
 
 
     def update(self):
             # fill here
+            if soccer.player.stop == 0:
+                self.timer = int(get_time())
 
             pass
 

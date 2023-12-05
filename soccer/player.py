@@ -14,6 +14,9 @@ FRAMES_PER_ACTION = 4.0
 def e_down(e):
     return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_e
 
+def s_down(e):
+    return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_s
+
 def e_up(e):
     return e[0] == 'INPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_e
 
@@ -252,7 +255,6 @@ class Idle:
 
         if space_down(e):
             player.shoot()
-            print(1)
         pass
 
     @staticmethod
@@ -291,6 +293,8 @@ class StateMachine:
         self.cur_state.enter(self.player, ('NONE', 0))
 
     def handle_event(self, e):
+        if s_down(e):
+            self.player.stop = 0
         if space_down(e) and soccer.ball.dribble_state == 1:
             soccer.ball.player_shoot = 1
             soccer.ball.shoot = 1
@@ -322,6 +326,7 @@ class StateMachine:
 
 class Player:
     def __init__(self):
+        self.stop = 0
         self.x, self.y = 650, 420
         self.frame = 0
         self.x_dir = 0

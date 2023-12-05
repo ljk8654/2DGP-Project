@@ -25,6 +25,7 @@ class Field:
 
         self.window_bottom = int(soccer.ball.y) - self.ch // 2
         self.window_bottom = clamp(0, self.window_bottom, self.h - self.ch - 1)
+
         pass
 
     def handle_event(self, event):

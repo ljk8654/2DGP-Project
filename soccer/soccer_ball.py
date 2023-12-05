@@ -3,7 +3,7 @@ import world
 import soccer
 import game_framework
 PIXEL_PER_METER = (1480 / 10)  # 1480 pixel 100 m
-RUN_SPEED_KMPH = 100.0  # Km / Hour
+RUN_SPEED_KMPH = 50.0  # Km / Hour
 RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60.0)
 RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
 RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
@@ -66,6 +66,7 @@ class Ball:
 
     def update(self):
         # 플레이어 슛
+
         if self.shoot == 1 and self.shoot_range > 0:
             self.shoot_range -= 10
             self.x += self.x_dir * RUN_SPEED_PPS * game_framework.frame_time
@@ -74,11 +75,10 @@ class Ball:
                 self.y_dir *= -1
         elif self.dribble_state == 1:
             self.x = soccer.player.x + 20 * soccer.player.x_dir + 2
-            self.y = soccer.player.y + 20 * soccer.player.y_dir - 5
+            self.y = soccer.player.y - 5
 
         # 적 슛
         if self.shoot == 2 and self.shoot_range > 0:
-            print(5555555555555555555)
             self.shoot_range -= 10
             self.x += self.x_dir * RUN_SPEED_PPS * game_framework.frame_time
             self.y += self.y_dir * 5
@@ -86,27 +86,35 @@ class Ball:
                 self.y_dir *= -1
 
         elif self.dribble_state == 2:
-            print(666666666666666)
             self.x = soccer.anemy.x + 20 * soccer.anemy.xdir
-            self.y = soccer.anemy.y + 20 * soccer.anemy.ydir
+            self.y = soccer.anemy.y - 5
 
         if self.shoot_range == 0:
             self.shoot_range = 400
             self.dribble_state = 0
             self.shoot = 0
             self.anemy_shoot, self.player_shoot = 0, 0
-        self.x = clamp(110, self.x, self.bg.w - 110)
+        self.x = clamp(110, self.x, self.bg.w - 150)
         self.y = clamp(140, self.y, self.bg.h - 100)
 
-        if (self.x == 110 or self.x == self.bg.w - 110) and self.y > 350 and self.y < 550:
+        if (self.x == 110 or self.x == self.bg.w - 150) and self.y > 350 and self.y < 550:
+
             if self.x == 110:
                 soccer.score.anemy_score += 1
-            if self.x == self.bg.w - 110:
+                soccer.player.x, soccer.player.y = 800, 420
+                soccer.anemy.x, soccer.anemy.y = 1000, 420
+
+            if self.x == self.bg.w - 150:
                 soccer.score.player_score += 1
-            soccer.anemy.x, soccer.anemy.y = 1000, 420
-            soccer.player.x, soccer.player.y = 600, 420
+                soccer.anemy.x, soccer.anemy.y = 900, 420
+                soccer.player.x, soccer.player.y = 600, 420
+
             self.x = self.bg.w // 2
             self.y = self.bg.h // 2
+            soccer.player.stop = 1
+            soccer.field.window_left = int(self.x) - soccer.field.cw // 2
+            soccer.field.window_bottom = int(self.y) - soccer.field.ch // 2
+
             self.dribble_state = 0
             self.shoot = 0
             self.shoot_range = 400
@@ -116,6 +124,7 @@ class Ball:
             self.frame = 0
             self.x_move = 0
             self.y_move = 0
+
 
         if self.x < self.x_move:
             self.frame = (self.frame + 1) % 4
@@ -151,15 +160,14 @@ class Ball:
         if group == 'anemy:ball':
             if self.dribble_state != 2 and self.anemy_shoot == 0:
                 self.dribble_state = 2
-                self.shoot_range = 400
+                self.shoot_range = 300
                 self.shoot = 0
                 self.player_shoot = 0
-                print(1)
 
         if group == 'player:ball':
             if self.dribble_state != 1 and self.player_shoot == 0:
                 self.dribble_state = 1
-                self.shoot_range = 400
+                self.shoot_range = 300
                 self.shoot = 0
                 self.anemy_shoot = 0
             pass
